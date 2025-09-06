@@ -1,0 +1,36 @@
+AR	= ar
+ARFUNCT	= cruv
+
+ifeq ($(Debug_symbols), )
+	Debug_symbols	:=	FALSE
+endif
+
+Debug_symbols_all =  -1
+
+
+ifeq ($(Debug_symbols_all), 1)
+	Debug_symbols	:=	TRUE
+else ifeq ($(Debug_symbols_all), -1)
+	Debug_symbols	:=	FALSE
+else
+endif
+
+export Debug_symbols
+
+ifeq ($(Debug_symbols), TRUE)
+	FFLAG		:= -O3  -qopenmp -check bounds -traceback  -g
+	F90FLAG		:= -f90=ifort -O3 -qopenmp -check bounds -traceback  -g -fpp
+	CFLAG		:= -cc=icc -std=c99 -O3 -fopenmp -lm -Wall -g  -pg
+	CPPFLAG     := -std=c++11 -O3  
+else
+	FFLAG		:= -O3  -qopenmp
+	F90FLAG		:= -f90=ifort -O3 -qopenmp
+	CFLAG       := -cc=icc -std=c99 -O3 -fopenmp -lm
+	CPPFLAG     := -std=c++11 -O3 
+endif 
+
+LD_F77 	:= 	-liomp5  -lifcore
+LD_F90 	:= 	-liomp5  -lifcore
+LD_C 	:= 	-lm
+LD_CPP 	:= 	-lm 
+

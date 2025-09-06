@@ -1,0 +1,92 @@
+
+
+F90_INCLUDE	:= $(FLAG_INCLUDE) $(LD_F90)
+F77_INCLUDE	:= $(FLAG_INCLUDE) $(LD_F77)
+C_INCLUDE	:= $(FLAG_INCLUDE) $(LD_C)
+CPP_INCLUDE	:= $(FLAG_INCLUDE) $(LD_CPP)
+f90_src_main 		:= $(filter %main.f90, $(f90_src))
+f90_src_nodir_main 	:= $(notdir $(f90_src_main))
+f90_obj_nodir_main 	:= $(patsubst %.f90, %.o, $(f90_src_nodir_main))
+f90_obj_dir_main 	:= $(addprefix $(OBJ_DIR)/, $(f90_obj_nodir_main))
+
+$(f90_obj_dir_main): $(f90_src_main)
+	$(FC) -c  $(filter %$(*F).f90,$(f90_src_main)) -o $@  -module $(OBJ_DIR) $(F90FLAG) $(F90_INCLUDE)
+
+f90_src_module		:= $(filter %module.f90, $(f90_src))
+f90_src_nodir_module:= $(notdir $(f90_src_module))
+f90_obj_nodir_module:= $(patsubst %.f90, %.o, $(f90_src_nodir_module))
+f90_obj_dir_module 	:= $(addprefix $(OBJ_DIR)/, $(f90_obj_nodir_module))
+
+$(f90_obj_dir_module): $(f90_src_module)
+	$(FC) $(F90FLAG) -c  $(filter %$(*F).f90,$(f90_src_module)) -o $@  -module $(OBJ_DIR) $(F90_INCLUDE)
+
+f90_src_sub 		:= $(filter-out %main.f90 %module.f90, $(f90_src))
+f90_src_nodir_sub 	:= $(notdir $(f90_src_sub))
+f90_obj_nodir_sub 	:= $(patsubst %.f90, %.o, $(f90_src_nodir_sub))
+f90_obj_dir_sub 	:= $(addprefix $(OBJ_DIR)/, $(f90_obj_nodir_sub))
+
+$(f90_obj_dir_sub): $(f90_src_sub)
+	$(FC) $(F90FLAG) -c  $(filter %$(*F).f90,$(f90_src_sub)) -o $@  -module $(OBJ_DIR) $(F90_INCLUDE)
+
+f_src_main 			:= $(filter %main.f, $(f_src))
+f_src_nodir_main 	:= $(notdir $(f_src_main))
+f_obj_nodir_main 	:= $(patsubst %.f, %.o, $(f_src_nodir_main))
+f_obj_dir_main 		:= $(addprefix $(OBJ_DIR)/, $(f_obj_nodir_main))
+
+$(f_obj_dir_main): $(f_src_main)
+	$(FC) -c  $(filter %$(*F).f,$(f_src_main)) -o $@  -module $(OBJ_DIR) $(FFLAG) $(F77_INCLUDE)
+
+f_src_module 		:= $(filter %module.f, $(f_src))
+f_src_nodir_module 	:= $(notdir $(f_src_module))
+f_obj_nodir_module 	:= $(patsubst %.f, %.o, $(f_src_nodir_module))
+f_obj_dir_module 	:= $(addprefix $(OBJ_DIR)/, $(f_obj_nodir_module))
+
+$(f_obj_dir_module): $(f_src_module)
+	$(FC) -c  $(filter %$(*F).f,$(f_src_module)) -o $@  -module $(OBJ_DIR) $(FFLAG) $(F77_INCLUDE)
+
+f_src_sub 			:= $(filter-out %main.f %module.f, $(f_src))
+f_src_nodir_sub 	:= $(notdir $(f_src_sub))
+f_obj_nodir_sub 	:= $(patsubst %.f, %.o, $(f_src_nodir_sub))
+f_obj_dir_sub 		:= $(addprefix $(OBJ_DIR)/, $(f_obj_nodir_sub))
+
+$(f_obj_dir_sub): $(f_src_sub)
+	$(FC) -c  $(filter %$(*F).f,$(f_src_sub)) -o $@  -module $(OBJ_DIR) $(FFLAG) $(F77_INCLUDE)
+
+c_src_main 			:= $(filter %main.c, $(c_src))
+c_src_nodir_main 	:= $(notdir $(c_src_main))
+c_obj_nodir_main 	:= $(patsubst %.c, %.o, $(c_src_nodir_main))
+c_obj_dir_main 		:= $(addprefix $(OBJ_DIR)/, $(c_obj_nodir_main))
+
+$(c_obj_dir_main): $(c_src_main)
+	$(CC) -c  $(filter %$(*F).c,$(c_src_main)) -o $@  $(CFLAG) $(C_INCLUDE)
+
+c_src_sub 			:= $(filter-out %main.c, $(c_src))
+c_src_nodir_sub 	:= $(notdir $(c_src_sub))
+c_obj_nodir_sub 	:= $(patsubst %.c, %.o, $(c_src_nodir_sub))
+c_obj_dir_sub 		:= $(addprefix $(OBJ_DIR)/, $(c_obj_nodir_sub))
+
+$(c_obj_dir_sub): $(c_src_sub)
+	$(CC) -c  $(filter %$(*F).c,$(c_src_sub)) -o $@  $(CFLAG) $(C_INCLUDE)
+
+cpp_src_main 		:= $(filter %main.cpp, $(cpp_src))
+cpp_src_nodir_main 	:= $(notdir $(cpp_src_main))
+cpp_obj_nodir_main 	:= $(patsubst %.cpp, %.o, $(cpp_src_nodir_main))
+cpp_obj_dir_main 	:= $(addprefix $(OBJ_DIR)/, $(cpp_obj_nodir_main))
+
+$(cpp_obj_dir_main): $(cpp_src_main)
+	$(CXX) -c  $(filter %$(*F).cpp,$(cpp_src_main)) -o $@  $(CPPFLAG) $(CPP_INCLUDE)
+
+cpp_src_sub 		:= $(filter-out %main.cpp, $(cpp_src))
+cpp_src_nodir_sub 	:= $(notdir $(cpp_src_sub))
+cpp_obj_nodir_sub 	:= $(patsubst %.cpp, %.o, $(cpp_src_nodir_sub))
+cpp_obj_dir_sub 	:= $(addprefix $(OBJ_DIR)/, $(cpp_obj_nodir_sub))
+
+$(cpp_obj_dir_sub): $(cpp_src_sub)
+	$(CXX) -c  $(filter %$(*F).cpp,$(cpp_src_sub)) -o $@  $(CPPFLAG) $(CPP_INCLUDE)
+
+sub_obj :=	$(f90_obj_dir_module) $(f_obj_dir_module) \
+			$(f90_obj_dir_sub) $(f_obj_dir_sub) \
+			$(c_obj_dir_sub) $(cpp_obj_dir_sub) 
+
+main_obj :=	$(f90_obj_dir_main) $(f_obj_dir_main) \
+			$(c_obj_dir_main) $(cpp_obj_dir_main) 

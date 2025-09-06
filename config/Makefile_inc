@@ -1,0 +1,8 @@
+MPICH214    =   ./
+MPICH       =   $(MPICH214)
+MPICH_INC   =   $(MPICH)/include
+MPICH_LIB   =   $(MPICH)/lib
+
+CC  = mpicc
+FC	= mpif90
+
